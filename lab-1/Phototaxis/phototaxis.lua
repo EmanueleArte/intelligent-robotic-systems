@@ -7,6 +7,7 @@ LIGHT_THRESHOLD = 0
 n_steps = 0
 last_light = 0
 last_steer_left = false
+counter = 0
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -55,7 +56,10 @@ function step()
 			if last_steer_left == true then
 				left_v = 0
 				right_v = MAX_VELOCITY
-				last_steer_left = false
+				counter = counter + 1
+				if counter > 1 then
+					last_steer_left = false
+				end
 			else
 				left_v = MAX_VELOCITY
 				right_v = 0
