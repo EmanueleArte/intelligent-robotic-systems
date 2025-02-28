@@ -10,7 +10,7 @@ Base
 3. Quando il valore di luminosità scende, il robot torna nella direzione precedente, dove la luce frontale era maggiore
 
 Add with noise
-- Ci mette molto di più a raggiungere la luce perché il rumore false le rilevazioni favorevoli
+- Ci mette molto di più a raggiungere la luce oppure non la raggiunge affatto perché il rumore false le rilevazioni favorevoli
 - Fix: 
 
 Add second ligth

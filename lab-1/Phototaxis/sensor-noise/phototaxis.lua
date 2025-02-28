@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 0
+LIGHT_THRESHOLD = 0.1
 
 n_steps = 0
 last_light = 0
@@ -44,7 +44,7 @@ function step()
 	if light == true then
 		robot.leds.set_all_colors("yellow")
 		-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
-		if light_front > last_light then
+		if light_front > last_light + LIGHT_THRESHOLD then
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		else
