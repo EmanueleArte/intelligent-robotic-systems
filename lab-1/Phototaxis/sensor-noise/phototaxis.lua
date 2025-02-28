@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 0.2
+LIGHT_THRESHOLD = 0.05
 
 n_steps = 0
 last_light = 0
