@@ -26,6 +26,7 @@ function step()
 	if n_steps % MOVE_STEPS == 0 then
 		left_v = robot.random.uniform(0,MAX_VELOCITY)
 		right_v = robot.random.uniform(0,MAX_VELOCITY)
+		right_v = 0
 	end
 
 	-- Search for the reading with the highest value
