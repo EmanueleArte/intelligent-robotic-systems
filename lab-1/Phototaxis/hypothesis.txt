@@ -9,6 +9,8 @@ Phototaxis
 3. Quando il valore di luminosità scende, il robot torna nella direzione precedente, dove la luce frontale era maggiore
 
 Add with noise
+- 
+
 Add second ligth
 ==========
 
@@ -20,7 +22,8 @@ Random walk with collision avoidance
 2. Quando il robot trova un ostacolo, si muove verso sinistra fino a che non evita l'ostacolo
 3. Quando l'ostacolo è stato evitato, il robot torna a muoversi in modo casuale
 
-
 Add with noise
+- 
+
 Add more robots
 ==========
