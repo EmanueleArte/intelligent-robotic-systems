@@ -47,7 +47,7 @@ function step()
 	elseif light == true then
 		robot.leds.set_all_colors("yellow")
 		-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
-		if light_front > last_light then
+		if light_front >= last_light then
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		else
