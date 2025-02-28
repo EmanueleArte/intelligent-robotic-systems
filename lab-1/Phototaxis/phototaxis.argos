@@ -26,7 +26,7 @@
 				<leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <footbot_light implementation="rot_z_only" show_rays="true" noise_level="0.0" />
+        <footbot_light implementation="rot_z_only" show_rays="true" noise_level="0.05" />
       </sensors>
       <params script="phototaxis.lua" />
     </lua_controller>
