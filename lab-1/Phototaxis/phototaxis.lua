@@ -55,9 +55,11 @@ function step()
 			if last_steer_left == true then
 				left_v = 0
 				right_v = MAX_VELOCITY
+				last_steer_left = false
 			else
 				left_v = MAX_VELOCITY
 				right_v = 0
+				last_steer_left = true
 			end
 		end
 		last_light = light_front
