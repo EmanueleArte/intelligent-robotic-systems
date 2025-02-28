@@ -6,7 +6,7 @@ LIGHT_THRESHOLD = 0
 
 n_steps = 0
 last_light = 0
-last_steer = 0 -- 0 = left, 1 = right
+steer_left = false
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -26,7 +26,7 @@ function step()
 	n_steps = n_steps + 1
 	if n_steps % MOVE_STEPS == 0 then
 		left_v = robot.random.uniform(0,MAX_VELOCITY)
-		right_v = robot.random.uniform(0,MAX_VELOCITY)
+		right_v = 0
 	end
 	light_front = robot.light[1].value + robot.light[24].value
 	log("robot.light_front = " .. light_front)
@@ -51,14 +51,12 @@ function step()
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		else
-			if last_steer == 0 then
+			if steer_left == true then
 				left_v = 0
 				right_v = MAX_VELOCITY
-				last_steer = 1
 			else
 				left_v = MAX_VELOCITY
 				right_v = 0
-				last_steer = 0
 			end
 		end
 		last_light = light_front
