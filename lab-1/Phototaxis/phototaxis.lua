@@ -38,29 +38,8 @@ function step()
 	log("ground SW: " .. ground[2].value)
 	log("ground SE: " .. ground[3].value)
 	log("ground NE: " .. ground[4].value)
-	
-	-- Search for the reading with the highest value
-	value = -1 -- highest value found so far
-	idx = -1   -- index of the highest value
-	for i=1,#robot.proximity do
-		if value < robot.proximity[i].value then
-			idx = i
-			value = robot.proximity[i].value
-		end
-	end
-	log("robot max proximity sensor: " .. idx .. "," .. value)
 
-	-- Check if on spot
-	spot = false
-	for i=1,4 do
-		if ground[i].value == 0 then
-			spot = true
-			break
-		end
-	end
-
-
-	--[[ Check if close to light 
+	--[[ Check if close to light
 	(note that the light threshold depends on both sensor and actuator characteristics) ]]
 	light = false
 	sum = 0
