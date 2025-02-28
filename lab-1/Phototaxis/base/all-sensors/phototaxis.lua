@@ -23,14 +23,18 @@ end
      It must contain the logic of your controller ]]
 function step()
 	n_steps = n_steps + 1
-	light_front = robot.light[1].value + robot.light[24].value
-	log("robot.light_front = " .. light_front)
 
 	--[[ Check if close to light
 	(note that the light threshold depends on both sensor and actuator characteristics) ]]
 	light = false
 	sum = 0
+	max = 0
+	max_i = 0
 	for i=1,#robot.light do
+		if robot.light[i].value > max then
+			max = robot.light[i].value
+			max_i = i
+		end
 		sum = sum + robot.light[i].value
 	end
 	if sum > LIGHT_THRESHOLD then
@@ -40,11 +44,14 @@ function step()
 	if light == true then
 		robot.leds.set_all_colors("yellow")
 		-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
-		if light_front > last_light then
+		if max_i == 1 or max_i == 24 then
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
-		else
-			-- [[ If the light is decreasing, steer towards the light ]]
+		-- [[ If the light is decreasing, steer towards the light ]]
+		elseif max_i > 1 or max_i < 13 then
+			left_v = -MAX_VELOCITY
+			right_v = MAX_VELOCITY
+		elseif max_i > 13 or max_i < 24 then
 			left_v = MAX_VELOCITY
 			right_v = -MAX_VELOCITY
 		end
