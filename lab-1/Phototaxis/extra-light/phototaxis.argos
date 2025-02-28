@@ -51,12 +51,16 @@
       <body position="0,1.9,0" orientation="0,0,0" />
     </box>
 
-    <light id="light"
-           position="0,0,0.5"
-           orientation="0,0,0"
+    <distribute>
+      <position method="uniform" min="-1.9,-1.9,0" max="1.9,1.9,0" />
+      <orientation method="uniform" min="0,0,0" max="360,0,0" />
+      <entity quantity="2" max_trials="100">
+        <light id="light"
            color="yellow"
            intensity="1"
            medium="leds"/>
+      </entity>
+    </distribute>
 
 
 <!--  If you want to place the robot(s) in a random position you may want to use this piece of code -->

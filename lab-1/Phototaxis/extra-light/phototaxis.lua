@@ -23,10 +23,6 @@ end
      It must contain the logic of your controller ]]
 function step()
 	n_steps = n_steps + 1
-	if n_steps % MOVE_STEPS == 0 then
-		left_v = robot.random.uniform(0,MAX_VELOCITY)
-		right_v = 0
-	end
 	light_front = robot.light[1].value + robot.light[24].value
 	log("robot.light_front = " .. light_front)
 
@@ -50,7 +46,7 @@ function step()
 		else
 			-- [[ If the light is decreasing, steer towards the light ]]
 			left_v = MAX_VELOCITY
-			right_v = 0
+			right_v = -MAX_VELOCITY
 		end
 		last_light = light_front
 	else
