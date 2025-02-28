@@ -31,7 +31,8 @@ Base
 Add with noise
 - Gira intorno a se stesso perché crede ci siano ostacoli ovunque
 - Fix: aggiungere un threshold di distanza per far fronte al rumore
+Funziona.
 
 Add more robots
-- Funziona normalmente
+- Funziona normalmente.
 ==========

@@ -50,6 +50,8 @@ function step()
 		end
 	else
 		robot.leds.set_all_colors("black")
+		left_v = MAX_VELOCITY
+		right_v = MAX_VELOCITY
 	end
 
 	robot.wheels.set_velocity(left_v,right_v)
