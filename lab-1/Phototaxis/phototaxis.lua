@@ -6,8 +6,7 @@ LIGHT_THRESHOLD = 0
 
 n_steps = 0
 last_light = 0
-last_steer_left = false
-counter = 0
+last_steer = 0 --[[ 0 = left, 1 = right ]]
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -53,17 +52,12 @@ function step()
 			right_v = MAX_VELOCITY
 		else
 			-- [[ If the light is decreasing, steer towards the light ]]
-			if last_steer_left == true then
+			if last_steer == 0 then
 				left_v = 0
 				right_v = MAX_VELOCITY
-				counter = counter + 1
-				if counter > 1 then
-					last_steer_left = false
-				end
 			else
 				left_v = MAX_VELOCITY
 				right_v = 0
-				last_steer_left = true
 			end
 		end
 		last_light = light_front
