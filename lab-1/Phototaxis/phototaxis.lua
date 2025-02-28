@@ -54,9 +54,9 @@ function step()
 			-- [[ If the light is decreasing, steer towards the light ]]
 			if last_steer_left == true then
 				left_v = 0
-				right_v = robot.random.uniform(0,MAX_VELOCITY)
+				right_v = 1
 			else
-				left_v = robot.random.uniform(0,MAX_VELOCITY)
+				left_v = 1
 				right_v = 0
 			end
 		end
