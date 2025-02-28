@@ -2,10 +2,10 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 0
+LIGHT_THRESHOLD = 1.5
 
 n_steps = 0
-last_light = 0
+
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -25,34 +25,29 @@ function step()
 	n_steps = n_steps + 1
 	if n_steps % MOVE_STEPS == 0 then
 		left_v = robot.random.uniform(0,MAX_VELOCITY)
+		right_v = robot.random.uniform(0,MAX_VELOCITY)
+	end
+
+	-- Search for the reading with the highest value
+	value = -1 -- highest value found so far
+	idx = -1   -- index of the highest value
+	for i=1,#robot.proximity do
+		if value < robot.proximity[i].value then
+			idx = i
+			value = robot.proximity[i].value
+		end
+	end
+	-- log("robot max proximity sensor: " .. idx .. "," .. value)
+
+	proximity_front = robot.proximity[1].value + robot.proximity[24].value
+	log("robot proximity front: " .. proximity_front)
+	if proximity_front > 0 then
+		left_v = MAX_VELOCITY
 		right_v = 0
 	end
-	light_front = robot.light[1].value + robot.light[24].value
-	log("robot.light_front = " .. light_front)
 
-	--[[ Check if close to light
-	(note that the light threshold depends on both sensor and actuator characteristics) ]]
-	light = false
-	sum = 0
-	for i=1,#robot.light do
-		sum = sum + robot.light[i].value
-	end
-	if sum > LIGHT_THRESHOLD then
-		light = true
-	end
-
-	if light == true then
-		robot.leds.set_all_colors("yellow")
-		-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
-		if light_front > last_light then
-			left_v = MAX_VELOCITY
-			right_v = MAX_VELOCITY
-		else
-			-- [[ If the light is decreasing, steer towards the light ]]
-			left_v = MAX_VELOCITY
-			right_v = 0
-		end
-		last_light = light_front
+	if proximity_front > 0 then
+		robot.leds.set_all_colors("red")
 	else
 		robot.leds.set_all_colors("black")
 	end
