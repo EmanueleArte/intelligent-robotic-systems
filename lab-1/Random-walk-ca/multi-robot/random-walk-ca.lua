@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 1.5
+PROX_THRESHOLD = 0.1
 
 n_steps = 0
 
@@ -28,9 +28,9 @@ function step()
 	value = -1 -- highest value found so far
 	idx = -1   -- index of the highest value
 	for i=1,#robot.proximity do
-		if value < robot.proximity[i].value then
+		if value < robot.proximity[i].value - PROX_THRESHOLD then
 			idx = i
-			value = robot.proximity[i].value
+			value = robot.proximity[i].value - PROX_THRESHOLD
 		end
 	end
 	log("robot max proximity sensor: " .. idx .. " - " .. value)
@@ -50,6 +50,8 @@ function step()
 		end
 	else
 		robot.leds.set_all_colors("black")
+		left_v = MAX_VELOCITY
+		right_v = MAX_VELOCITY
 	end
 
 	robot.wheels.set_velocity(left_v,right_v)

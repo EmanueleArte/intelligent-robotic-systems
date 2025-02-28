@@ -24,8 +24,9 @@ Random walk with collision avoidance
 ==========
 Base
 1. Il robot si muove in modo casuale fino a che non trova un ostacolo
-2. Quando il robot trova un ostacolo, si muove verso il lato opposto all'ostacolo
+2. Quando il robot trova un ostacolo, si muove verso la direzione opposta rispetto ostacolo
 3. Quando l'ostacolo è stato evitato, il robot torna a muoversi in modo casuale
+4. Se arriva ad un vicolo cieco rimane bloccato (non riesce a trovare una direzione libera ne a destra ne a sinistra)
 
 Add with noise
 - Gira intorno a se stesso perché crede ci siano ostacoli ovunque
