@@ -51,7 +51,7 @@ function step()
 		elseif max_i > 1 or max_i < 13 then --[[ Go left]]
 			left_v = -MAX_VELOCITY
 			right_v = MAX_VELOCITY
-		elseif max_i > 13 or max_i < 24 then --[[ Go right]]
+		elseif max_i > 12 or max_i < 24 then --[[ Go right]]
 			left_v = MAX_VELOCITY
 			right_v = -MAX_VELOCITY
 		end
