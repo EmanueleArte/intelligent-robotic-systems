@@ -39,7 +39,7 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
   <arena size="4, 4, 1" center="0,0,0.5" positional_grid_size="8,8,1">
-	<floor id="f" />
+	<floor id="f" color="white" />
     <box id="bn" size="0.1, 4, 0.2" movable="false">
       <body position="1.9, 0, 0"  orientation="0,0,0" />
     </box>
@@ -73,16 +73,15 @@
       </entity>
     </distribute>
 
-
   </arena>
- 
+
   <!-- ******************* -->
   <!-- * Physics engines * -->
   <!-- ******************* -->
   <physics_engines>
     <dynamics2d id="dyn2d" />
   </physics_engines>
- 
+
   <!-- ********* -->
   <!-- * Media * -->
   <!-- ********* -->
@@ -90,7 +89,7 @@
     <led id="leds" />
   </media>
 
-	
+
   <!-- ****************** -->
   <!-- * Visualization * -->
   <!-- ****************** -->
