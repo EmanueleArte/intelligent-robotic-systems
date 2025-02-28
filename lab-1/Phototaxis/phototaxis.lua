@@ -67,9 +67,6 @@ function step()
 	end
 
 	robot.wheels.set_velocity(left_v,right_v)
-	log("robot.position.x = " .. robot.positioning.position.x)
-	log("robot.position.y = " .. robot.positioning.position.y)
-	log("robot.position.z = " .. robot.positioning.position.z)
 
 end
 
