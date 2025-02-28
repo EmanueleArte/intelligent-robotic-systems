@@ -39,6 +39,7 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
   <arena size="4, 4, 1" center="0,0,0.5" positional_grid_size="8,8,1">
+	<floor id="f" />
     <box id="bn" size="0.1, 4, 0.2" movable="false">
       <body position="1.9, 0, 0"  orientation="0,0,0" />
     </box>
@@ -58,14 +59,6 @@
            color="yellow"
            intensity="1"
            medium="leds"/>
-
-    <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="5" max_trials="100">
-        <box id="o" size="0.2, 0.2, 0.2" movable="false" />
-      </entity>
-    </distribute>
 
 
 <!--     If you want to place the robot(s) in a random position you may want to use this piece of code -->
