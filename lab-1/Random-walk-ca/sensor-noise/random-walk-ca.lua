@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 1.5
+PROX_THRESHOLD = 0.1
 
 n_steps = 0
 
@@ -41,12 +41,12 @@ function step()
 
 	proximity_front = robot.proximity[1].value + robot.proximity[24].value
 	log("robot proximity front: " .. proximity_front)
-	if proximity_front > 0 then
+	if proximity_front > PROX_THRESHOLD then
 		left_v = MAX_VELOCITY
 		right_v = 0
 	end
 
-	if proximity_front > 0 then
+	if proximity_front > PROX_THRESHOLD then
 		robot.leds.set_all_colors("red")
 	else
 		robot.leds.set_all_colors("black")
