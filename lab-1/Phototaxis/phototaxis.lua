@@ -5,7 +5,8 @@ MAX_VELOCITY = 10
 LIGHT_THRESHOLD = 1.5
 
 n_steps = 0
-
+last_light = 0
+last_steer = 0 -- 0 = left, 1 = right
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -27,17 +28,8 @@ function step()
 		left_v = robot.random.uniform(0,MAX_VELOCITY)
 		right_v = robot.random.uniform(0,MAX_VELOCITY)
 	end
-	robot.wheels.set_velocity(left_v,right_v)
-	log("robot.position.x = " .. robot.positioning.position.x)
-	log("robot.position.y = " .. robot.positioning.position.y)
-	log("robot.position.z = " .. robot.positioning.position.z)
 	light_front = robot.light[1].value + robot.light[24].value
 	log("robot.light_front = " .. light_front)
-	ground = robot.motor_ground --just to save some chars...
-	log("ground NW: " .. ground[1].value)
-	log("ground SW: " .. ground[2].value)
-	log("ground SE: " .. ground[3].value)
-	log("ground NE: " .. ground[4].value)
 
 	--[[ Check if close to light
 	(note that the light threshold depends on both sensor and actuator characteristics) ]]
@@ -50,15 +42,33 @@ function step()
 		light = true
 	end
 
-
 	if spot == true then
 		robot.leds.set_all_colors("red")
 	elseif light == true then
 		robot.leds.set_all_colors("yellow")
+		-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
+		if light_front > last_light then
+			left_v = MAX_VELOCITY
+			right_v = MAX_VELOCITY
+		else
+			if last_steer == 0 then
+				left_v = 0
+				right_v = MAX_VELOCITY
+				last_steer = 1
+			else
+				left_v = MAX_VELOCITY
+				right_v = 0
+				last_steer = 0
+			end
+		end
 	else
 		robot.leds.set_all_colors("black")
 	end
 
+	robot.wheels.set_velocity(left_v,right_v)
+	log("robot.position.x = " .. robot.positioning.position.x)
+	log("robot.position.y = " .. robot.positioning.position.y)
+	log("robot.position.z = " .. robot.positioning.position.z)
 
 end
 
