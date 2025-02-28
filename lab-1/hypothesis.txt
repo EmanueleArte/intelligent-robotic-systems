@@ -10,14 +10,15 @@ Add with noise
 1.0
 - Ci mette molto di più a raggiungere la luce oppure non la raggiunge affatto perché il rumore false le rilevazioni favorevoli
 - Fix: Aggiungere un threshold di luminosità per far fronte al rumore (ci mette di più a raggiungere la luce ma la raggiunge)
-Non va (gira su se stesso) se la luce rilevata è minore del threshold
+Gira su se stesso se la luce rilevata è minore del threshold
 
 2.0
 - Gira intorno a se stesso perché crede ci siano ostacoli ovunque
 - Fix: 
 
 Add second ligth
-- 
+- Si dirige verso la luce più vicina (se le luci sono lontane tra loro)
+- Si muove verso le luci senza riuscire a raggiungerne definitivamente nessuna (se le luci sono abbastanza vicine tra loro)
 ==========
 
 
