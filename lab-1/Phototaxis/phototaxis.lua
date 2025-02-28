@@ -6,7 +6,7 @@ LIGHT_THRESHOLD = 0
 
 n_steps = 0
 last_light = 0
-steer_left = false
+last_steer_left = false
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -51,11 +51,12 @@ function step()
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		else
-			if steer_left == true then
+			-- [[ If the light is decreasing, steer towards the light ]]
+			if last_steer_left == true then
 				left_v = 0
-				right_v = MAX_VELOCITY
+				right_v = robot.random.uniform(0,MAX_VELOCITY)
 			else
-				left_v = MAX_VELOCITY
+				left_v = robot.random.uniform(0,MAX_VELOCITY)
 				right_v = 0
 			end
 		end
