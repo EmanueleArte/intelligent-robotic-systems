@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-LIGHT_THRESHOLD = 0
+LIGHT_THRESHOLD = 0.1
 
 n_steps = 0
 last_light = 0
@@ -48,10 +48,10 @@ function step()
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		-- [[ If the light is decreasing, steer towards the light ]]
-		elseif max_i > 1 or max_i < 13 then
+		elseif max_i > 1 or max_i < 13 then --[[ Go left]]
 			left_v = -MAX_VELOCITY
 			right_v = MAX_VELOCITY
-		elseif max_i > 13 or max_i < 24 then
+		elseif max_i > 13 or max_i < 24 then --[[ Go right]]
 			left_v = MAX_VELOCITY
 			right_v = -MAX_VELOCITY
 		end
