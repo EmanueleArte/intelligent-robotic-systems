@@ -2,7 +2,7 @@
 
 MOVE_STEPS = 15
 MAX_VELOCITY = 5
-PROX_THRESHOLD = 0.1
+LIGHT_THRESHOLD = 1.5
 
 n_steps = 0
 
@@ -10,8 +10,8 @@ n_steps = 0
 --[[ This function is executed every time you press the 'execute'
      button ]]
 function init()
-	left_v = robot.random.uniform(0,MAX_VELOCITY)
-	right_v = robot.random.uniform(0,MAX_VELOCITY)
+	left_v = MAX_VELOCITY
+	right_v = MAX_VELOCITY
 	robot.wheels.set_velocity(left_v,right_v)
 	n_steps = 0
 	robot.leds.set_all_colors("black")
@@ -23,10 +23,6 @@ end
      It must contain the logic of your controller ]]
 function step()
 	n_steps = n_steps + 1
-	if n_steps % MOVE_STEPS == 0 then
-		left_v = robot.random.uniform(0,MAX_VELOCITY)
-		right_v = robot.random.uniform(0,MAX_VELOCITY)
-	end
 
 	-- Search for the reading with the highest value
 	value = -1 -- highest value found so far
@@ -37,17 +33,21 @@ function step()
 			value = robot.proximity[i].value
 		end
 	end
-	-- log("robot max proximity sensor: " .. idx .. "," .. value)
+	log("robot max proximity sensor: " .. idx .. " - " .. value)
 
-	proximity_front = robot.proximity[1].value + robot.proximity[24].value
-	log("robot proximity front: " .. proximity_front)
-	if proximity_front > PROX_THRESHOLD then
-		left_v = MAX_VELOCITY
-		right_v = 0
-	end
-
-	if proximity_front > PROX_THRESHOLD then
+	if value > 0 then
 		robot.leds.set_all_colors("red")
+		-- [[ Check where is the nearest obstacle and move accordingly ]]
+		if idx >= 19 and idx <= 24 then --[[ Go left ]]
+			left_v = -MAX_VELOCITY
+			right_v = MAX_VELOCITY
+		elseif idx >= 1 and idx <= 6 then --[[ Go right ]]
+			left_v = MAX_VELOCITY
+			right_v = -MAX_VELOCITY
+		else
+			left_v = MAX_VELOCITY
+			right_v = MAX_VELOCITY
+		end
 	else
 		robot.leds.set_all_colors("black")
 	end

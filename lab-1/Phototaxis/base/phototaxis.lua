@@ -48,14 +48,13 @@ function step()
 			left_v = MAX_VELOCITY
 			right_v = MAX_VELOCITY
 		-- [[ If the light is decreasing, steer towards the light ]]
-		elseif max_i > 1 or max_i < 13 then --[[ Go left]]
+		elseif max_i > 1 and max_i < 13 then --[[ Go left]]
 			left_v = -MAX_VELOCITY
 			right_v = MAX_VELOCITY
-		elseif max_i >= 13 or max_i < 24 then --[[ Go right]]
+		elseif max_i >= 13 and max_i < 24 then --[[ Go right]]
 			left_v = MAX_VELOCITY
 			right_v = -MAX_VELOCITY
 		end
-		last_light = light_front
 	else
 		robot.leds.set_all_colors("black")
 	end
