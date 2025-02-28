@@ -1,19 +1,23 @@
 Phototaxis
 ==========
 Base
-1. Il robot si muove in modo casuale fino a che non trova la luce di fronte
-2. Quando il robot trova la luce di fronte, si muove verso di essa senza deviare fino a che il valore di luminosità non scende
-3. Quando il valore di luminosità scende, il robot torna nella direzione precedente, dove la luce frontale era maggiore
-
+1.0
 1. Il robot gira intorno a se stesso fino a che non trova la luce di fronte
 2. Quando il robot trova la luce di fronte, si muove verso di essa senza deviare fino a che il valore di luminosità non scende e curva a sinistra
 3. Quando il valore di luminosità scende, il robot torna nella direzione precedente, dove la luce frontale era maggiore
 
 Add with noise
+1.0
 - Ci mette molto di più a raggiungere la luce oppure non la raggiunge affatto perché il rumore false le rilevazioni favorevoli
 - Fix: Aggiungere un threshold di luminosità per far fronte al rumore (ci mette di più a raggiungere la luce ma la raggiunge)
+Non va (gira su se stesso) se la luce rilevata è minore del threshold
+
+2.0
+- Gira intorno a se stesso perché crede ci siano ostacoli ovunque
+- Fix: 
 
 Add second ligth
+- 
 ==========
 
 
@@ -30,5 +34,5 @@ Add with noise
 - Fix: aggiungere un threshold di distanza per far fronte al rumore
 
 Add more robots
-- Dovrebbe funzionare normalmente
+- Funziona normalmente
 ==========

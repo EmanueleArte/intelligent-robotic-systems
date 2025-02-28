@@ -50,7 +50,7 @@ function step()
 		else
 			-- [[ If the light is decreasing, steer towards the light ]]
 			left_v = MAX_VELOCITY
-			right_v = 0
+			right_v = -MAX_VELOCITY
 		end
 		last_light = light_front
 	else
