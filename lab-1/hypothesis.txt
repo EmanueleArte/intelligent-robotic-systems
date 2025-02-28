@@ -11,7 +11,7 @@ Base
 
 Add with noise
 - Ci mette molto di più a raggiungere la luce oppure non la raggiunge affatto perché il rumore false le rilevazioni favorevoli
-- Fix: 
+- Fix: Aggiungere un threshold di luminosità per far fronte al rumore (ci mette di più a raggiungere la luce ma la raggiunge)
 
 Add second ligth
 ==========
