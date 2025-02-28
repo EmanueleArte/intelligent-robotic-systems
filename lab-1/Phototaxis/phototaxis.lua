@@ -61,6 +61,7 @@ function step()
 				last_steer = 0
 			end
 		end
+		last_light = light_front
 	else
 		robot.leds.set_all_colors("black")
 	end
