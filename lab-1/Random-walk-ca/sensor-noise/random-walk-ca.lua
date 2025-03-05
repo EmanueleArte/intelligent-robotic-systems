@@ -1,6 +1,6 @@
 -- Put your global variables here
 
-MOVE_STEPS = 15
+UNSTUCK_STEPS = 10
 MAX_VELOCITY = 5
 PROX_THRESHOLD = 0.1
 
@@ -13,7 +13,7 @@ function init()
 	left_v = MAX_VELOCITY
 	right_v = MAX_VELOCITY
 	robot.wheels.set_velocity(left_v,right_v)
-	n_steps = 0
+	n_steps = UNSTUCK_STEPS
 	robot.leds.set_all_colors("black")
 end
 
@@ -22,33 +22,50 @@ end
 --[[ This function is executed at each time step
      It must contain the logic of your controller ]]
 function step()
-	n_steps = n_steps + 1
+	left_prox = 0
+	right_prox = 0
 
-	-- Search for the reading with the highest value
-	value = -1 -- highest value found so far
-	idx = -1   -- index of the highest value
+	-- Rotate to unstuck
+	if n_steps < UNSTUCK_STEPS then
+		n_steps = n_steps + 1
+		return
+	end
+
 	for i=1,#robot.proximity do
-		if value < robot.proximity[i].value - PROX_THRESHOLD then
-			idx = i
-			value = robot.proximity[i].value - PROX_THRESHOLD
+		--[[ Sum readings for left and right proximity sensors ]]
+		if robot.proximity[i].value > PROX_THRESHOLD then
+			if i >= 19 and i <= 24 then
+				left_prox = left_prox + robot.proximity[i].value
+			elseif i >= 1 and i <= 6 then
+				right_prox = right_prox + robot.proximity[i].value
+			end
 		end
 	end
-	log("robot max proximity sensor: " .. idx .. " - " .. value)
 
-	if value > 0 then
+	stuck = 0
+	-- Action based on left proximity readings
+	if left_prox > 0 then
 		robot.leds.set_all_colors("red")
-		-- [[ Check where is the nearest obstacle and move accordingly ]]
-		if idx >= 19 and idx <= 24 then --[[ Go left ]]
-			left_v = -MAX_VELOCITY
-			right_v = MAX_VELOCITY
-		elseif idx >= 1 and idx <= 6 then --[[ Go right ]]
-			left_v = MAX_VELOCITY
-			right_v = -MAX_VELOCITY
-		else
-			left_v = MAX_VELOCITY
-			right_v = MAX_VELOCITY
-		end
-	else
+		left_v = -left_prox
+		stuck = stuck + 1
+	end
+
+	-- Action based on right proximity readings
+	if right_prox > 0 then
+		robot.leds.set_all_colors("red")
+		right_v = -right_prox
+		stuck = stuck + 1
+	end
+
+	-- If stuck becuase of both proximity sensors detect obstacles
+	if stuck >= 2 then
+		left_v = -MAX_VELOCITY
+		right_v = MAX_VELOCITY
+		n_steps = 0
+	end
+
+	-- Go straight if no obstacles detected
+	if left_prox == 0 and right_prox == 0 then
 		robot.leds.set_all_colors("black")
 		left_v = MAX_VELOCITY
 		right_v = MAX_VELOCITY

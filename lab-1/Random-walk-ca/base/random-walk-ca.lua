@@ -4,7 +4,6 @@ UNSTUCK_STEPS = 10
 MAX_VELOCITY = 5
 
 n_steps = 0
-random_rotate = false
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
