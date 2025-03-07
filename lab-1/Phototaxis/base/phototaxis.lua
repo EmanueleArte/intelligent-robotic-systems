@@ -5,7 +5,6 @@ MAX_VELOCITY = 5
 LIGHT_THRESHOLD = 0
 
 n_steps = 0
-last_light = 0
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
