@@ -1,11 +1,23 @@
+-- Definisci la funzione min
+function min(a, b)
+    if a < b then
+        return a
+    else
+        return b
+    end
+end
+
 -- Put your global variables here
 
 UNSTUCK_STEPS = 5
 MAX_VELOCITY = 15
-LIGHT_THRESHOLD = 0
-PROX_THRESHOLD = 0.15
+LIGHT_THRESHOLD = 0.05
+PROX_THRESHOLD = 0.1
 
 n_steps = 0
+random_rotation = 0
+speed = 0
+multiplier = 1
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -14,6 +26,7 @@ function init()
 	right_v = MAX_VELOCITY
 	robot.wheels.set_velocity(left_v,right_v)
 	n_steps = UNSTUCK_STEPS
+	speed = MAX_VELOCITY
 	robot.leds.set_all_colors("black")
 end
 
@@ -25,15 +38,23 @@ function step()
 	left_prox = 0
 	right_prox = 0
 
-	-- Rotate to unstuck
+	-- Unstuck
 	if n_steps < UNSTUCK_STEPS then
+		robot.wheels.set_velocity(-MAX_VELOCITY,-MAX_VELOCITY)
+		-- robot.wheels.set_velocity(-MAX_VELOCITY,0)
+		n_steps = n_steps + 1
+		random_rotation = robot.random.uniform_int(UNSTUCK_STEPS,UNSTUCK_STEPS * 3)
+		return
+	end
+	if n_steps < UNSTUCK_STEPS + random_rotation then
+		robot.wheels.set_velocity(-MAX_VELOCITY,0)
 		n_steps = n_steps + 1
 		return
 	end
 
 	for i=1,#robot.proximity do
 		--[[ Sum readings for left and right proximity sensors ]]
-		if robot.proximity[i].value > PROX_THRESHOLD then
+		if robot.proximity[i].value > PROX_THRESHOLD + min(multiplier, 0.6) then
 			if i >= 19 and i <= 24 then
 				left_prox = left_prox + robot.proximity[i].value
 			elseif i >= 1 and i <= 6 then
@@ -46,22 +67,25 @@ function step()
 	-- Action based on left proximity readings
 	if left_prox > 0 then
 		robot.leds.set_all_colors("red")
-		left_v = -left_prox
+		left_v = -left_prox * 2
+		-- right_v = 0
 		stuck = stuck + 1
+		multiplier = 0.3
 	end
 
 	-- Action based on right proximity readings
 	if right_prox > 0 then
 		robot.leds.set_all_colors("red")
-		right_v = -right_prox
+		-- left_v = 0
+		right_v = -right_prox * 2
 		stuck = stuck + 1
+		multiplier = 0.3
 	end
 
 	-- If stuck becuase of both proximity sensors detect obstacles
 	if stuck >= 2 then
-		left_v = -MAX_VELOCITY
-		right_v = MAX_VELOCITY
 		n_steps = 0
+		multiplier = 0
 	end
 
 	-- Go straight if no obstacles detected
@@ -72,38 +96,42 @@ function step()
 		max = 0
 		max_i = 0
 		for i=1,#robot.light do
-			if robot.light[i].value > max then
-				max = robot.light[i].value
-				max_i = i
+			if robot.light[i].value > LIGHT_THRESHOLD then
+				if robot.light[i].value > max then
+					max = robot.light[i].value
+					max_i = i
+				end
+				sum = sum + robot.light[i].value
 			end
-			sum = sum + robot.light[i].value
 		end
-		if sum > LIGHT_THRESHOLD then
+		if sum > 0 then
 			light = true
 		end
+
+		multiplier = multiplier + 0.1
 
 		if light == true then
 			robot.leds.set_all_colors("yellow")
 			-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
 			if max_i == 1 or max_i == 24 then
-				left_v = MAX_VELOCITY
-				right_v = MAX_VELOCITY
+				left_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
+				right_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 			-- [[ If the light is decreasing, steer towards the light ]]
 			elseif max_i > 1 and max_i < 13 then --[[ Go left]]
-				left_v = -MAX_VELOCITY
-				right_v = MAX_VELOCITY
+				left_v = -max * MAX_VELOCITY
 			elseif max_i >= 13 and max_i < 24 then --[[ Go right]]
 				left_v = MAX_VELOCITY
-				right_v = -MAX_VELOCITY
+				right_v = -max * MAX_VELOCITY
 			end
 		else
 			robot.leds.set_all_colors("black")
-			left_v = MAX_VELOCITY
-			right_v = MAX_VELOCITY
+			left_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
+			right_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 		end
 	end
 
 	robot.wheels.set_velocity(left_v,right_v)
+	-- log("left_v: " .. left_v .. " right_v: " .. right_v)
 
 end
 
