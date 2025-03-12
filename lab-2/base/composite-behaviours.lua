@@ -46,11 +46,6 @@ function step()
 		random_rotation = robot.random.uniform_int(UNSTUCK_STEPS,UNSTUCK_STEPS * 3)
 		return
 	end
-	-- if n_steps < UNSTUCK_STEPS + random_rotation then
-	-- 	robot.wheels.set_velocity(-MAX_VELOCITY,0)
-	-- 	n_steps = n_steps + 1
-	-- 	return
-	-- end
 
 	for i=1,#robot.proximity do
 		--[[ Sum readings for left and right proximity sensors ]]
