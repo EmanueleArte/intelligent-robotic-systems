@@ -40,7 +40,6 @@ function step()
 
 	-- Unstuck
 	if n_steps < UNSTUCK_STEPS then
-		-- robot.wheels.set_velocity(-MAX_VELOCITY,-MAX_VELOCITY)
 		robot.wheels.set_velocity(-MAX_VELOCITY,0)
 		n_steps = n_steps + 1
 		random_rotation = robot.random.uniform_int(UNSTUCK_STEPS,UNSTUCK_STEPS * 3)
@@ -105,7 +104,7 @@ function step()
 
 		multiplier = multiplier + 0.1
 
-		if light == true and n_ignore > UNSTUCK_STEPS then
+		if light == true and n_ignore > UNSTUCK_STEPS + 1 then
 			robot.leds.set_all_colors("yellow")
 			-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
 			if max_i == 1 or max_i == 24 then
