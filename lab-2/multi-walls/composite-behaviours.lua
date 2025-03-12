@@ -104,7 +104,7 @@ function step()
 
 		multiplier = multiplier + 0.1
 
-		if light == true and n_ignore > UNSTUCK_STEPS + 1 then
+		if light == true and n_ignore > UNSTUCK_STEPS then
 			robot.leds.set_all_colors("yellow")
 			-- [[ Check if light in front is increasing or decreasing and move accordingly ]]
 			if max_i == 1 or max_i == 24 then
