@@ -1,4 +1,4 @@
--- Definisci la funzione min
+-- Definizione funzioni
 function min(a, b)
     if a < b then
         return a
@@ -7,17 +7,27 @@ function min(a, b)
     end
 end
 
+function distance(x1, y1, x2, y2)
+	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
+end
+
 -- Put your global variables here
 
 UNSTUCK_STEPS = 5
 MAX_VELOCITY = 15
 LIGHT_THRESHOLD = 0.05
 PROX_THRESHOLD = 0.1
+LIGHT_X = 0
+LIGHT_Y = 0
+LIGHT_REACHED = 0.3
 
 n_steps = 0
 random_rotation = 0
 n_ignore = 0
 multiplier = 1
+
+first_time_light = 0
+steps_to_light = 0
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -100,6 +110,10 @@ function step()
 		end
 		if sum > 0 then
 			light = true
+			-- [[ Save the distance to the light the first time it is detected ]]
+			if first_time_light == 0 then
+				first_time_light = distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y)
+			end
 		end
 
 		multiplier = multiplier + 0.1
@@ -124,6 +138,17 @@ function step()
 			left_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 			right_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 		end
+	end
+
+	-- Increase number of steps necessary to reach the light
+	if first_time_light > 0 then
+		steps_to_light = steps_to_light + 1
+	end
+
+	-- If the robot reaches the light print the number of steps and distance covered
+	if distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y) < LIGHT_REACHED and first_time_light > 0 then
+		log("Steps necessary to reach light: " .. steps_to_light .. " with distance: " .. first_time_light)
+		first_time_light = -1
 	end
 
 	robot.wheels.set_velocity(left_v,right_v)
