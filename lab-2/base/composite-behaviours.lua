@@ -118,8 +118,9 @@ function step()
 				right_v = -max * MAX_VELOCITY
 			end
 		else
-			if light == false:
+			if light == false then
 				robot.leds.set_all_colors("black")
+			end
 			left_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 			right_v = min(MAX_VELOCITY,MAX_VELOCITY * multiplier)
 		end
