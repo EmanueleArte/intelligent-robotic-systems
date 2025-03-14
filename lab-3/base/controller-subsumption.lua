@@ -35,7 +35,31 @@ function init()
     robot.leds.set_all_colors("black")
 end
 
--- Phototaxis behavior
+-- Halt compentency
+function halt(suppress)
+    if suppress == true then
+        return suppress
+    end
+    spot = 0
+    ground = robot.motor_ground
+	for i=1,4 do
+		if ground[i].value == 0 then
+			spot = spot + 1
+		end
+	end
+
+    if spot == 4 then
+        log("halt")
+        robot.leds.set_all_colors("green")
+        left_v = 0
+        right_v = 0
+        return true
+    end
+
+    return suppress
+end
+
+-- Phototaxis compentency
 function phototaxis(suppress)
     if suppress == true or n_ignore < UNSTUCK_STEPS then
         return suppress
@@ -80,7 +104,7 @@ function phototaxis(suppress)
     return suppress
 end
 
--- Unstuck behavior
+-- Unstuck compentency
 function unstuck(suppress)
     if suppress == true then
         return suppress
@@ -94,7 +118,7 @@ function unstuck(suppress)
     return suppress
 end
 
--- Collision avoidance behavior
+-- Collision avoidance compentency
 function avoid_obstacles(suppress)
     if suppress == true then
         return suppress
@@ -139,6 +163,7 @@ function avoid_obstacles(suppress)
     return suppress
 end
 
+-- Go straight compentency
 function go_straight(suppress)
     if suppress == true then
         return suppress
@@ -156,6 +181,7 @@ end
 function step()
     suppress = false
 
+    suppress = halt(suppress) -- [[ Level 4 ]]
     suppress, suppress_0 = phototaxis(suppress) -- [[ Level 3 ]]
     suppress = unstuck(suppress) -- [[ Level 2 ]]
     suppress = avoid_obstacles(suppress) -- [[ Level 1 ]]
