@@ -17,8 +17,10 @@ MAX_VELOCITY = 15
 LIGHT_THRESHOLD = 0.01
 PROX_THRESHOLD = 0.05
 HALT_THRESHOLD = 0.1
-LIGHT_X = 0
+LIGHT_X = 2
 LIGHT_Y = 0
+MIN_RADIUS = 4.7
+
 
 n_steps = 0
 n_ignore = 0
@@ -26,6 +28,7 @@ multiplier = 1
 
 first_time_light = 0
 steps_to_light = 0
+light_reached = false
 
 function init()
     left_v = MAX_VELOCITY
@@ -50,7 +53,9 @@ function halt(suppress)
 	end
 
     if spot == 4 then
-        log("halt")
+        -- log("halt")
+        log("Steps to reach the light (distance=" .. MIN_RADIUS .. "): " .. steps_to_light)
+        light_reached = true
         robot.leds.set_all_colors("green")
         left_v = 0
         right_v = 0
@@ -65,7 +70,7 @@ function phototaxis(suppress)
     if suppress == true or n_ignore < UNSTUCK_STEPS then
         return suppress
     end
-    log("phototaxis")
+    -- log("phototaxis")
     light = false
     sum = 0
     max = 0
@@ -83,9 +88,10 @@ function phototaxis(suppress)
 
     if sum > 0 then
         light = true
-        if first_time_light == 0 then
-            first_time_light = distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y)
-        end
+        -- [[ Fixed distance from light source to cover for testing purposes ]]
+		if first_time_light == 0 and distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y) <= MIN_RADIUS then
+			first_time_light = 1
+		end
     end
 
     if light == true then
@@ -111,9 +117,11 @@ function unstuck(suppress)
         return suppress
     end
     if n_steps < UNSTUCK_STEPS then
-        log("unstuck")
-		robot.wheels.set_velocity(-MAX_VELOCITY,0)
+        -- log("unstuck")
+		left_v = -MAX_VELOCITY
+        right_v = MAX_VELOCITY
 		n_steps = n_steps + 1
+        n_ignore = 0
         return true
 	end
     return suppress
@@ -145,15 +153,18 @@ function avoid_obstacles(suppress)
     end
 
     if left_prox > 0 then
-        log("avoid obstacles left")
+        -- log("avoid obstacles left")
         robot.leds.set_all_colors("red")
         right_v = -left_prox
         set_values()
-    elseif right_prox > 0 then
-        log("avoid obstacles right")
+        stuck = stuck + 1
+    end
+    if right_prox > 0 then
+        -- log("avoid obstacles right")
         robot.leds.set_all_colors("red")
         left_v = -right_prox
         set_values()
+        stuck = stuck + 1
     end
 
     -- If stuck becuase of both proximity sensors detect obstacles
@@ -191,6 +202,10 @@ function step()
 
     n_ignore = n_ignore + 1
     multiplier = multiplier + 0.1
+    -- Increase number of steps necessary to reach the light for testing purposes
+	if first_time_light > 0 and light_reached == false then
+		steps_to_light = steps_to_light + 1
+	end
 end
 
 -- Funzione di reset
