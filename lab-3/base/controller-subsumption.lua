@@ -99,7 +99,7 @@ function phototaxis(suppress)
             left_v = MAX_VELOCITY
             right_v = -max * MAX_VELOCITY
         end
-        return suppress, true
+        return true
     end
 
     return suppress
@@ -183,10 +183,10 @@ function step()
     suppress = false
 
     suppress = halt(suppress) -- [[ Level 4 ]]
-    suppress, suppress_0 = phototaxis(suppress) -- [[ Level 3 ]]
-    suppress = unstuck(suppress) -- [[ Level 2 ]]
-    suppress = avoid_obstacles(suppress) -- [[ Level 1 ]]
-    suppress = go_straight(suppress or suppress_0) -- [[ Level 0 ]]
+    suppress = unstuck(suppress) -- [[ Level 3 ]]
+    suppress = avoid_obstacles(suppress) -- [[ Level 2 ]]
+    suppress = phototaxis(suppress) -- [[ Level 1 ]]
+    suppress = go_straight(suppress) -- [[ Level 0 ]]
     move()
 
     n_ignore = n_ignore + 1
