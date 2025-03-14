@@ -14,8 +14,9 @@ end
 -- Global variables
 UNSTUCK_STEPS = 5
 MAX_VELOCITY = 15
-LIGHT_THRESHOLD = 0.05
-PROX_THRESHOLD = 0.1
+LIGHT_THRESHOLD = 0.01
+PROX_THRESHOLD = 0.05
+HALT_THRESHOLD = 0.1
 LIGHT_X = 0
 LIGHT_Y = 0
 
@@ -43,7 +44,7 @@ function halt(suppress)
     spot = 0
     ground = robot.motor_ground
 	for i=1,4 do
-		if ground[i].value == 0 then
+		if ground[i].value < HALT_THRESHOLD then
 			spot = spot + 1
 		end
 	end
