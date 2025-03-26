@@ -2,7 +2,7 @@ local vector = require "vector"
 
 -- Global variables
 MAX_VELOCITY = 15
-VEL_THRESHOLD = 0.05
+VEL_THRESHOLD = 0.01
 LIGHT_THRESHOLD = 0.1
 PROX_THRESHOLD = 0.05
 HALT_THRESHOLD = 0.1
@@ -49,7 +49,6 @@ function phototaxis_ps()
 
     if sum > 0 then
         light = true
-        log("light: " .. max .. " " .. max_i)
         -- [[ Fixed distance from light source to cover for testing purposes ]]
 		if first_time_light == 0 and distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y) <= MIN_RADIUS then
 			first_time_light = 1
@@ -94,15 +93,23 @@ function obstacle_avoidance_ps()
 end
 
 function set_robot_velocity(vector)
+    -- If the vector is too small, generate a new random vector
     if vector.length <= VEL_THRESHOLD then
-        robot.wheels.set_velocity(MAX_VELOCITY,MAX_VELOCITY)
-    else
-        wheels_v = calc_wheel_velocity(vector.length, vector.angle)
-        log("wheels: " .. wheels_v.v_left .. " " .. wheels_v.v_right)
-        left_v = math.min(MAX_VELOCITY, wheels_v.v_left * MAX_VELOCITY)
-        right_v = math.min(MAX_VELOCITY, wheels_v.v_right * MAX_VELOCITY)
-        robot.wheels.set_velocity(left_v, right_v)
+        vector.length = robot.random.uniform(VEL_THRESHOLD, LIGHT_IMPORTANCE + PROX_IMPORTANCE)
+        vector.angle = robot.random.uniform(-math.pi, math.pi)
     end
+    -- Calculate the velocity of the wheels from the vector
+    wheels_v = calc_wheel_velocity(vector.length, vector.angle)
+    left_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_left * MAX_VELOCITY))
+    right_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_right * MAX_VELOCITY))
+    -- Mantain the ratio between the two wheels
+    if math.abs(wheels_v.v_left) < math.abs(wheels_v.v_right) then
+        left_v = left_v * math.abs(wheels_v.v_left / wheels_v.v_right)
+    else
+        right_v = right_v * math.abs(wheels_v.v_right / wheels_v.v_left)
+    end
+    log("wheels: " .. left_v .. " " .. right_v)
+    robot.wheels.set_velocity(left_v, right_v)
 end
 
 function step()

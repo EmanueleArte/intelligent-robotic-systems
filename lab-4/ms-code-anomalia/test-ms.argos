@@ -8,8 +8,7 @@
   <framework>
     <system threads="0" />
     <experiment length="0"
-                ticks_per_second="10" 
-                random_seed="2"
+                ticks_per_second="10" />
     />
   </framework>
 
@@ -30,7 +29,7 @@
         <differential_steering implementation="default" noise_level="0.0"/>
 				<positioning implementation="default" noise_level="0.0" />
       </sensors>
-     <params script="controller-ms.lua" />
+     <params script="controller-ms-temp.lua" />
    </lua_controller>
 
 
@@ -59,18 +58,18 @@
            position="2,0,0.5"
            orientation="0,0,0"
            color="yellow"
-           intensity="4"
+           intensity="3"
            medium="leds"/>
 
-    <distribute>
+    <!-- <distribute>
       <position method="uniform" min="-2,-2.5,0" max="1.5,2.5,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="2" max_trials="100">
         <box id="o1" size="0.8, 0.2, 0.8" movable="false" />
       </entity>
-    </distribute>
+    </distribute> -->
 
-    <distribute>
+    <!-- <distribute>
       <position method="uniform" min="-2,-2.5,0" max="1.5,2.5,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="5" max_trials="100">
@@ -84,12 +83,12 @@
       <entity quantity="12" max_trials="100">
         <box id="o3" size="0.2, 0.3, 0.2" movable="false" />
       </entity>
-    </distribute>
+    </distribute> -->
 
     <distribute>
       <position method="uniform" min="-2.9,-2.9,0" max="-2,2.9,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="15" max_trials="100">
+      <orientation method="uniform" min="90,0,0" max="90,0,0" />
+      <entity quantity="1" max_trials="100">
         <foot-bot id="fb1">
           <controller config="lua" />
         </foot-bot>
