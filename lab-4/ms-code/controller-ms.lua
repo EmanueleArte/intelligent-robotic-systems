@@ -8,6 +8,7 @@ PROX_THRESHOLD = 0.05
 HALT_THRESHOLD = 0.1
 LIGHT_IMPORTANCE = 5
 PROX_IMPORTANCE = 1
+LIGHT_REACHED = 0.2
 LIGHT_X = 2
 LIGHT_Y = 0
 MIN_RADIUS = 4.7
@@ -108,7 +109,6 @@ function set_robot_velocity(vector)
     else
         right_v = right_v * math.abs(wheels_v.v_right / wheels_v.v_left)
     end
-    log("wheels: " .. left_v .. " " .. right_v)
     robot.wheels.set_velocity(left_v, right_v)
 end
 
@@ -126,6 +126,10 @@ function step()
     -- Increase number of steps necessary to reach the light for testing purposes
 	if first_time_light > 0 and light_reached == false then
 		steps_to_light = steps_to_light + 1
+	end
+    if distance(robot.positioning.position.x, robot.positioning.position.y, LIGHT_X, LIGHT_Y) < LIGHT_REACHED and first_time_light > 0 then
+		log("Steps necessary to reach light: " .. steps_to_light .. " with distance: " .. MIN_RADIUS)
+		first_time_light = -1
 	end
 end
 

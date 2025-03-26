@@ -9,7 +9,7 @@
     <system threads="0" />
     <experiment length="0"
                 ticks_per_second="10" 
-                random_seed="2"
+                random_seed="8"
     />
   </framework>
 
@@ -87,9 +87,9 @@
     </distribute>
 
     <distribute>
-      <position method="uniform" min="-2.9,-2.9,0" max="-2,2.9,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="15" max_trials="100">
+      <position method="uniform" min="-2.5,-2.5,0" max="-2.5,-2.5,0" />
+      <orientation method="uniform" min="300,0,0" max="300,0,0" />
+      <entity quantity="1" max_trials="100">
         <foot-bot id="fb1">
           <controller config="lua" />
         </foot-bot>
