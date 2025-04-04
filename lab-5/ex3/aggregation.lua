@@ -29,7 +29,7 @@ function halt()
 	end
 
     if spot == 4 then
-        DS = 0.3
+        DS = 0.2
         DW = 0.3
     else
         DS = 0
