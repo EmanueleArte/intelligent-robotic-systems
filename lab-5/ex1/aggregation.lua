@@ -1,20 +1,22 @@
 MAX_VELOCITY = 15
-PsMAX = 0.99
-PwMIN = 0.005
+PSmax = 0.99
+PWmin = 0.005
 alpha = 0.1
 beta = 0.05
-MAX_BEARING_RANGE = 30 -- cm
+MAXRANGE = 30 -- [cm]
 N_STEPS = 20
-PROX_THRESHOLD = 0
+PROX_THRESHOLD = 0.9
 VEL_THRESHOLD = 0.01
 L = robot.wheels.axis_length
 
-function calc_Ps()
-    return math.min(PsMAX, S + alpha * N)
+status = 0 -- [0: not stopped, 1: stopped]
+
+function calc_PS()
+    return math.min(PSmax, S + alpha * N)
 end
 
-function calc_Pw()
-    return math.max(PwMIN, W - beta * N)
+function calc_PW()
+    return math.max(PWmin, W - beta * N)
 end
 
 -- Obstacle avoidance perceptual schema
@@ -40,8 +42,16 @@ function obstacle_avoidance_ps()
         prox = true
     end
 
+    function adjust(angle)
+        if angle < 0 then
+            return angle + math.pi
+        else
+            return angle - math.pi
+        end
+    end
+
     if prox == true then
-        return {length = (1 - max), angle = -robot.proximity[max_i].angle}
+        return {length = max, angle = adjust(robot.proximity[max_i].angle)}
     end
 
     return {length = 0, angle = 0}
@@ -56,7 +66,11 @@ function calc_wheel_velocity(v, w)
     return {v_left = v + w*(-L/2), v_right = v + w*(L/2)}
 end
 
-function set_robot_velocity(vector)
+function set_robot_velocity(vector, stop)
+    if stop then
+        robot.wheels.set_velocity(0, 0)
+        return
+    end
     -- If the vector is too small, go straight
     if vector.length <= VEL_THRESHOLD then
         if n_steps < N_STEPS then
@@ -81,19 +95,55 @@ function set_robot_velocity(vector)
     robot.wheels.set_velocity(left_v, right_v)
 end
 
+-- Count the number of stopped robots sensed close to the robot
+function CountRAB()
+    number_robot_sensed = 0
+    for i = 1, #robot.range_and_bearing do
+    -- for each robot seen, check if it is close enough.
+        if robot.range_and_bearing[i].range < MAXRANGE and robot.range_and_bearing[i].data[1]==1 then
+            number_robot_sensed = number_robot_sensed + 1
+        end
+    end
+    return number_robot_sensed
+end
+
 
 function init()
 	W = 0.1
     S = 0.01
     N = 0
     n_steps = 0
+    robot.leds.set_all_colors("yellow")
 end
 
 
 function step()
 	oa_vector = obstacle_avoidance_ps()
+    N = CountRAB()
 
-    set_robot_velocity(oa_vector)
+    ps = calc_PS()
+    pw = calc_PW()
+
+    t = robot.random.uniform()
+    if status == 0 then
+        if t <= ps then
+            status = 1
+        end
+    else
+        if t <= pw then
+            status = 0
+        end
+    end
+
+    if status == 0 then
+        robot.range_and_bearing.set_data(1,0)
+        set_robot_velocity(oa_vector, false)
+        robot.leds.set_all_colors("yellow")
+    else
+        robot.range_and_bearing.set_data(1,1)
+        set_robot_velocity(oa_vector, true)
+        robot.leds.set_all_colors("red")
+    end
 
     n_steps = n_steps + 1
 end
