@@ -9,7 +9,7 @@ PROX_THRESHOLD = 0.9
 VEL_THRESHOLD = 0.01
 HALT_THRESHOLD = 0.1
 
-status = 0 -- [0: not stopped, 1: stopped]
+status = 0 -- [0: moving, 1: stopped]
 
 function calc_PS()
     return math.min(PSmax, S + alpha * N + DS)
