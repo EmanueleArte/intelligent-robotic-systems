@@ -19,7 +19,7 @@ function calc_PW()
     return math.max(PWmin, W - beta * N - DW)
 end
 
-function halt()
+function check_halt()
     spot = 0
     ground = robot.motor_ground
 	for i=1,4 do
@@ -141,7 +141,7 @@ end
 function step()
 	oa_vector = obstacle_avoidance_ps()
     N = CountRAB()
-    halt()
+    check_halt()
 
     ps = calc_PS()
     pw = calc_PW()
