@@ -10,7 +10,7 @@ function evaluate()
 
     Ml = robot.wheels.velocity_left / MAX_SPEED
     Mr = robot.wheels.velocity_right / MAX_SPEED
-    return (sum / 4) * (1 - (math.abs(Ml - Mr)) / 2) * math.max(0, (Ml + Mr) / 2)
+    return 1 - ((sum / 4) * (1 - (math.abs(Ml - Mr)) / 2) * math.max(0, (Ml + Mr) / 2))
 end
 
 
