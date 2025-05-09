@@ -1,9 +1,9 @@
 MAX_VELOCITY = 15
 PSmax = 0.99
 PWmin = 0.005
-alpha = 0.1
-beta = 0.05
-MAXRANGE = 30 -- [cm]
+alpha = 0.05
+beta = 0.0075
+MAXRANGE = 40 -- [cm]
 N_STEPS = 20
 PROX_THRESHOLD = 0.9
 VEL_THRESHOLD = 0.01
@@ -30,7 +30,7 @@ function check_halt()
 
     if spot == 4 then
         DS = 0.2
-        DW = 0.3
+        DW = 0.05
     else
         DS = 0
         DW = 0
