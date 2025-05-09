@@ -5,12 +5,12 @@ BASE_GROUND_THRESHOLD = 0.1
 function evaluate()
     local sum = 0
     for i=1,#robot.motor_ground do
-        sum = sum + robot.motor_ground[i].value
+        sum = sum + (1 - robot.motor_ground[i].value)
     end
 
     Ml = robot.wheels.velocity_left / MAX_SPEED
     Mr = robot.wheels.velocity_right / MAX_SPEED
-    return 1 - ((sum / 4) * (1 - (math.abs(Ml - Mr)) / 2) * math.max(0, (Ml + Mr) / 2))
+    return (sum / 4) * (1 - (math.abs(Ml - Mr)) / 2) * math.max(0, (Ml + Mr) / 2)
 end
 
 
