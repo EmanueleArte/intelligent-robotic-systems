@@ -19,8 +19,8 @@ end
 
 
 function step()
-    local base_speed = MAX_SPEED / 4 * 3
-    local adjustment = MAX_SPEED / 4
+    local base_speed = MAX_SPEED / 3 * 2
+    local adjustment = MAX_SPEED / 3
 
     -- Obstacle Avoidance
     local obstacle_detected = false
