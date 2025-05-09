@@ -1,5 +1,6 @@
 MAX_SPEED = 10
 PROX_THRESHOLD = 0.1
+BASE_GROUND_THRESHOLD = 0.1
 
 function evaluate()
     local sum = 0
@@ -18,12 +19,8 @@ end
 
 
 function step()
-    -- Read sensor values
-    local left_ground = robot.motor_ground[1].value
-    local right_ground = robot.motor_ground[2].value
-
-    local base_speed = MAX_SPEED / 2
-    local adjustment = MAX_SPEED / 2
+    local base_speed = MAX_SPEED / 4 * 3
+    local adjustment = MAX_SPEED / 4
 
     -- Obstacle Avoidance
     local obstacle_detected = false
@@ -58,12 +55,23 @@ function step()
         robot.wheels.set_velocity(left_speed, right_speed)
     else
         -- Line Following
-        if left_ground > right_ground then
+        local direction = 0 -- -1: left, 0: forward, 1: right
+        local left_ground = robot.motor_ground[1].value
+        local right_ground = robot.motor_ground[4].value
+        if left_ground < BASE_GROUND_THRESHOLD and right_ground < BASE_GROUND_THRESHOLD then
+            ground_index = 0
+        elseif left_ground < BASE_GROUND_THRESHOLD then
+            ground_index = -1
+        elseif right_ground < BASE_GROUND_THRESHOLD then
+            ground_index = 1
+        end
+
+        if ground_index == -1 then
             robot.wheels.set_velocity(base_speed - adjustment, base_speed + adjustment)
-        elseif right_ground > left_ground then
+        elseif ground_index == 1 then
             robot.wheels.set_velocity(base_speed + adjustment, base_speed - adjustment)
         else
-            robot.wheels.set_velocity(MAX_SPEED, MAX_SPEED)
+            robot.wheels.set_velocity(base_speed, base_speed)
         end
     end
 
