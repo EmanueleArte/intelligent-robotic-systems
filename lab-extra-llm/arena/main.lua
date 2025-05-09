@@ -19,8 +19,8 @@ end
 
 
 function step()
-    local base_speed = MAX_SPEED / 3 * 2
-    local adjustment = MAX_SPEED / 3
+    local base_speed = MAX_SPEED
+    local adjustment = MAX_SPEED
 
     -- Obstacle Avoidance
     local obstacle_detected = false
@@ -67,9 +67,9 @@ function step()
         end
 
         if ground_index == -1 then
-            robot.wheels.set_velocity(base_speed - adjustment, base_speed + adjustment)
+            robot.wheels.set_velocity(base_speed - adjustment, base_speed)
         elseif ground_index == 1 then
-            robot.wheels.set_velocity(base_speed + adjustment, base_speed - adjustment)
+            robot.wheels.set_velocity(base_speed, base_speed - adjustment)
         else
             robot.wheels.set_velocity(base_speed, base_speed)
         end
