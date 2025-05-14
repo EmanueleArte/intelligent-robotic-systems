@@ -1,11 +1,9 @@
 local vector = require "vector"
 
--- Global variables
 MAX_VELOCITY = 15
 VEL_THRESHOLD = 0.01
 LIGHT_THRESHOLD = 0.1
 PROX_THRESHOLD = 0.05
-HALT_THRESHOLD = 0.1
 LIGHT_IMPORTANCE = 5
 PROX_IMPORTANCE = 1
 LIGHT_REACHED = 0.2
@@ -16,6 +14,7 @@ MIN_RADIUS = 4.7
 first_time_light = 0
 steps_to_light = 0
 light_reached = false
+
 
 function init()
     robot.wheels.set_velocity(MAX_VELOCITY,MAX_VELOCITY)
@@ -38,6 +37,7 @@ function phototaxis_ps()
     max = 0
     max_i = 0
 
+    -- Check if the light is detected and what sensor is detecting it with the highest value
     for i=1,#robot.light do
         if robot.light[i].value > LIGHT_THRESHOLD then
             if robot.light[i].value > max then
@@ -56,6 +56,7 @@ function phototaxis_ps()
 		end
     end
 
+    -- If the light is detected, calculate the vector to move towards it
     if light == true then
         return {length = max * LIGHT_IMPORTANCE, angle = robot.light[max_i].angle}
     end
@@ -70,6 +71,7 @@ function obstacle_avoidance_ps()
     max = 0
     max_i = 0
 
+    -- Check if an obstacle is detected and what sensor is detecting it with the highest value
     for i=1,#robot.proximity do
         if robot.proximity[i].value > PROX_THRESHOLD then
             if (i >= 20 and i <= 24) or (i >= 1 and i <= 5) then
@@ -86,6 +88,7 @@ function obstacle_avoidance_ps()
         prox = true
     end
 
+    -- If an obstacle is detected, calculate the vector to move away from it
     if prox == true then
         return {length = (1 - max) * PROX_IMPORTANCE, angle = -robot.proximity[max_i].angle}
     end
@@ -99,24 +102,29 @@ function set_robot_velocity(vector)
         vector.length = robot.random.uniform(VEL_THRESHOLD, LIGHT_IMPORTANCE + PROX_IMPORTANCE)
         vector.angle = robot.random.uniform(-math.pi, math.pi)
     end
+
     -- Calculate the velocity of the wheels from the vector
     wheels_v = calc_wheel_velocity(vector.length, vector.angle)
     left_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_left * MAX_VELOCITY))
     right_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_right * MAX_VELOCITY))
+
     -- Mantain the ratio between the two wheels
     if math.abs(wheels_v.v_left) < math.abs(wheels_v.v_right) then
         left_v = left_v * math.abs(wheels_v.v_left / wheels_v.v_right)
     else
         right_v = right_v * math.abs(wheels_v.v_right / wheels_v.v_left)
     end
+
     robot.wheels.set_velocity(left_v, right_v)
 end
+
 
 function step()
     phototaxis_v = phototaxis_ps()
     obstacle_avoidance_v = obstacle_avoidance_ps()
 
     res_v = {length = 0, angle = 0}
+    -- Sum the vectors from the two perceptual schemas if they are valid
     if phototaxis_v.length > 0 or obstacle_avoidance_v.length > 0 then
         res_v = vector.vec2_polar_sum(phototaxis_v, obstacle_avoidance_v)
     end
@@ -133,13 +141,13 @@ function step()
 	end
 end
 
--- Funzione di reset
+
 function reset()
     robot.wheels.set_velocity(MAX_VELOCITY,MAX_VELOCITY)
     robot.leds.set_all_colors("black")
 end
 
--- Funzione di distruzione
+
 function destroy()
    -- Inserisci qui il tuo codice
 end

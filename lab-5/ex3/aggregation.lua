@@ -11,10 +11,12 @@ HALT_THRESHOLD = 0.1
 
 status = 0 -- [0: moving, 1: stopped]
 
+-- Calculate stop probability
 function calc_PS()
     return math.min(PSmax, S + alpha * N + DS)
 end
 
+-- Calculate move probability
 function calc_PW()
     return math.max(PWmin, W - beta * N - DW)
 end
@@ -89,6 +91,7 @@ function set_robot_velocity(vector, stop)
         robot.wheels.set_velocity(0, 0)
         return
     end
+
     -- If the vector is too small, go straight
     if vector.length <= VEL_THRESHOLD then
         if n_steps < N_STEPS then
@@ -100,16 +103,19 @@ function set_robot_velocity(vector, stop)
         end
         return
     end
+
     -- Calculate the velocity of the wheels from the vector
     wheels_v = calc_wheel_velocity(vector.length, vector.angle)
     left_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_left * MAX_VELOCITY))
     right_v = math.min(MAX_VELOCITY, math.max(-MAX_VELOCITY, wheels_v.v_right * MAX_VELOCITY))
+
     -- Mantain the ratio between the two wheels
     if math.abs(wheels_v.v_left) < math.abs(wheels_v.v_right) then
         left_v = left_v * math.abs(wheels_v.v_left / wheels_v.v_right)
     else
         right_v = right_v * math.abs(wheels_v.v_right / wheels_v.v_left)
     end
+
     robot.wheels.set_velocity(left_v, right_v)
 end
 
@@ -147,11 +153,12 @@ function step()
     pw = calc_PW()
 
     t = robot.random.uniform()
+    -- If the robot is moving, check if it should stop
     if status == 0 then
         if t <= ps then
             status = 1
         end
-    else
+    else  -- If the robot is stopped, check if it should restart moving
         if t <= pw then
             status = 0
         end
@@ -172,10 +179,8 @@ end
 
 
 function reset()
-
 end
 
 
 function destroy()
-
 end

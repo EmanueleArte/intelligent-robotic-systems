@@ -1,12 +1,8 @@
--- Put your global variables here
-
 UNSTUCK_STEPS = 10
 MAX_VELOCITY = 5
 
 n_steps = 0
 
---[[ This function is executed every time you press the 'execute'
-     button ]]
 function init()
 	left_v = MAX_VELOCITY
 	right_v = MAX_VELOCITY
@@ -16,9 +12,6 @@ function init()
 end
 
 
-
---[[ This function is executed at each time step
-     It must contain the logic of your controller ]]
 function step()
 	left_prox = 0
 	right_prox = 0
@@ -72,12 +65,6 @@ function step()
 end
 
 
-
---[[ This function is executed every time you press the 'reset'
-     button in the GUI. It is supposed to restore the state
-     of the controller to whatever it was right after init() was
-     called. The state of sensors and actuators is reset
-     automatically by ARGoS. ]]
 function reset()
 	left_v = robot.random.uniform(0,MAX_VELOCITY)
 	right_v = robot.random.uniform(0,MAX_VELOCITY)
@@ -87,9 +74,6 @@ function reset()
 end
 
 
-
---[[ This function is executed only once, when the robot is removed
-     from the simulation ]]
 function destroy()
    -- put your code here
 end

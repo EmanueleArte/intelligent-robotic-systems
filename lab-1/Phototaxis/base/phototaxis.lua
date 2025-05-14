@@ -1,6 +1,3 @@
--- Put your global variables here
-
-MOVE_STEPS = 15
 MAX_VELOCITY = 5
 LIGHT_THRESHOLD = 0
 

@@ -52,8 +52,8 @@ function halt(suppress)
 		end
 	end
 
+    -- Check if all ground sensors are on the halt area
     if spot == 4 then
-        -- log("halt")
         log("Steps to reach the light (distance=" .. MIN_RADIUS .. "): " .. steps_to_light)
         light_reached = true
         robot.leds.set_all_colors("green")
@@ -76,6 +76,7 @@ function phototaxis(suppress)
     max = 0
     max_i = 0
 
+    -- Check if the light is detected and what sensor is detecting it with the highest value
     for i=1,#robot.light do
         if robot.light[i].value > LIGHT_THRESHOLD then
             if robot.light[i].value > max then
@@ -117,7 +118,6 @@ function unstuck(suppress)
         return suppress
     end
     if n_steps < UNSTUCK_STEPS then
-        -- log("unstuck")
 		left_v = -MAX_VELOCITY
         right_v = MAX_VELOCITY
 		n_steps = n_steps + 1
@@ -146,6 +146,7 @@ function avoid_obstacles(suppress)
         end
     end
 
+    -- Function for commonly set values with standard values
     function set_values()
         n_ignore = 0
         multiplier = 0.3
@@ -153,14 +154,12 @@ function avoid_obstacles(suppress)
     end
 
     if left_prox > 0 then
-        -- log("avoid obstacles left")
         robot.leds.set_all_colors("red")
         right_v = -left_prox
         set_values()
         stuck = stuck + 1
     end
     if right_prox > 0 then
-        -- log("avoid obstacles right")
         robot.leds.set_all_colors("red")
         left_v = -right_prox
         set_values()
@@ -190,6 +189,7 @@ function move()
     robot.wheels.set_velocity(left_v, right_v)
 end
 
+
 function step()
     suppress = false
 
@@ -208,7 +208,7 @@ function step()
 	end
 end
 
--- Funzione di reset
+
 function reset()
     left_v = robot.random.uniform(0,MAX_VELOCITY)
     right_v = robot.random.uniform(0,MAX_VELOCITY)
@@ -218,7 +218,7 @@ function reset()
     robot.leds.set_all_colors("black")
 end
 
--- Funzione di distruzione
+
 function destroy()
    -- Inserisci qui il tuo codice
 end

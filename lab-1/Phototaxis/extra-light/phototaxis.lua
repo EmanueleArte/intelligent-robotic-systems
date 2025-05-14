@@ -1,11 +1,7 @@
--- Put your global variables here
-
-MOVE_STEPS = 15
 MAX_VELOCITY = 5
 LIGHT_THRESHOLD = 0
 
 n_steps = 0
-last_light = 0
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
@@ -16,7 +12,6 @@ function init()
 	n_steps = 0
 	robot.leds.set_all_colors("black")
 end
-
 
 
 --[[ This function is executed at each time step
@@ -64,7 +59,6 @@ function step()
 end
 
 
-
 --[[ This function is executed every time you press the 'reset'
      button in the GUI. It is supposed to restore the state
      of the controller to whatever it was right after init() was
@@ -77,7 +71,6 @@ function reset()
 	n_steps = 0
 	robot.leds.set_all_colors("black")
 end
-
 
 
 --[[ This function is executed only once, when the robot is removed

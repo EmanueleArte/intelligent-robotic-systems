@@ -11,8 +11,6 @@ function distance(x1, y1, x2, y2)
 	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
 end
 
--- Put your global variables here
-
 UNSTUCK_STEPS = 5
 MAX_VELOCITY = 15
 LIGHT_THRESHOLD = 0.05
@@ -24,14 +22,13 @@ MIN_RADIUS = 1.4
 
 n_steps = 0
 random_rotation = 0
-n_ignore = 0
+n_ignore = 0 -- Number of steps to ignore light
 multiplier = 1
 
 first_time_light = 0
 steps_to_light = 0
 
---[[ This function is executed every time you press the 'execute'
-     button ]]
+
 function init()
 	left_v = MAX_VELOCITY
 	right_v = MAX_VELOCITY
@@ -42,9 +39,6 @@ function init()
 end
 
 
-
---[[ This function is executed at each time step
-     It must contain the logic of your controller ]]
 function step()
 	left_prox = 0
 	right_prox = 0
@@ -158,12 +152,6 @@ function step()
 end
 
 
-
---[[ This function is executed every time you press the 'reset'
-     button in the GUI. It is supposed to restore the state
-     of the controller to whatever it was right after init() was
-     called. The state of sensors and actuators is reset
-     automatically by ARGoS. ]]
 function reset()
 	left_v = robot.random.uniform(0,MAX_VELOCITY)
 	right_v = robot.random.uniform(0,MAX_VELOCITY)
@@ -174,9 +162,6 @@ function reset()
 end
 
 
-
---[[ This function is executed only once, when the robot is removed
-     from the simulation ]]
 function destroy()
    -- put your code here
 end

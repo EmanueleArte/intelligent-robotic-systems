@@ -1,5 +1,3 @@
--- Put your global variables here
-
 UNSTUCK_STEPS = 10
 MAX_VELOCITY = 5
 PROX_THRESHOLD = 0.1
@@ -7,8 +5,6 @@ PROX_THRESHOLD = 0.1
 n_steps = 0
 
 
---[[ This function is executed every time you press the 'execute'
-     button ]]
 function init()
 	left_v = MAX_VELOCITY
 	right_v = MAX_VELOCITY

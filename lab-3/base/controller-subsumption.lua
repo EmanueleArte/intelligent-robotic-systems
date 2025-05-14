@@ -11,7 +11,6 @@ function distance(x1, y1, x2, y2)
     return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
 end
 
--- Global variables
 UNSTUCK_STEPS = 5
 MAX_VELOCITY = 15
 LIGHT_THRESHOLD = 0.01
@@ -25,7 +24,7 @@ n_ignore = 0
 multiplier = 1
 
 first_time_light = 0
-steps_to_light = 0
+
 
 function init()
     left_v = MAX_VELOCITY
@@ -49,6 +48,7 @@ function halt(suppress)
 		end
 	end
 
+    -- Check if all ground sensors are on the halt area
     if spot == 4 then
         log("halt")
         robot.leds.set_all_colors("green")
@@ -71,6 +71,7 @@ function phototaxis(suppress)
     max = 0
     max_i = 0
 
+    -- Check if the light is detected and what sensor is detecting it with the highest value
     for i=1,#robot.light do
         if robot.light[i].value > LIGHT_THRESHOLD then
             if robot.light[i].value > max then
@@ -138,6 +139,7 @@ function avoid_obstacles(suppress)
         end
     end
 
+    -- Function for commonly set values with standard values
     function set_values()
         n_ignore = 0
         multiplier = 0.3
@@ -179,6 +181,7 @@ function move()
     robot.wheels.set_velocity(left_v, right_v)
 end
 
+
 function step()
     suppress = false
 
@@ -193,7 +196,7 @@ function step()
     multiplier = multiplier + 0.1
 end
 
--- Funzione di reset
+
 function reset()
     left_v = robot.random.uniform(0,MAX_VELOCITY)
     right_v = robot.random.uniform(0,MAX_VELOCITY)
@@ -203,7 +206,7 @@ function reset()
     robot.leds.set_all_colors("black")
 end
 
--- Funzione di distruzione
+
 function destroy()
    -- Inserisci qui il tuo codice
 end
